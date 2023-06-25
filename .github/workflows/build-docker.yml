@@ -18,20 +18,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set Owner name to LowerCase
-        id: lower_case
-        run: |
-          OWNER_LC=${OWNER,,}
-          REPOSITORY_LC=${REPOSITORY,,}
-          echo "::set-output name=ownerlc::$OWNER_LC"
-          echo "::set-output name=repositorylc::$REPOSITORY_LC"
-        env:
-          OWNER: "${{ github.repository_owner }}"
-          REPOSITORY: "${{ github.repository }}"
+      - name: Convert repository name to lowercase
+        id: lowercase-repo
+        run: echo "::set-output name=repository::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
 
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ steps.lower_case.outputs.ownerlc }}/${{ steps.lower_case.outputs.repositorylc }}:latest
+          tags: ghcr.io/${{ steps.lowercase-repo.outputs.repository }}:latest
