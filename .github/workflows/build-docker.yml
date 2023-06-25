@@ -21,8 +21,8 @@ jobs:
       - name: Set Owner name to LowerCase
         id: lower_case
         run: |
-          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
-          echo "REPOSITORY_LC=${REPOSITORY,,}" >>${GITHUB_ENV}
+          OWNER_LC=${OWNER,,}
+          REPOSITORY_LC=${REPOSITORY,,}
           echo "::set-output name=ownerlc::$OWNER_LC"
           echo "::set-output name=repositorylc::$REPOSITORY_LC"
         env:
