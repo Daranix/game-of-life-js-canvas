@@ -19,9 +19,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Owner name to LowerCase
+        id: lower_case
         run: |
           echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
           echo "REPOSITORY_LC=${REPOSITORY,,}" >>${GITHUB_ENV}
+          echo "::set-output name=ownerlc::$OWNER_LC"
+          echo "::set-output name=repositorylc::$REPOSITORY_LC"
         env:
           OWNER: "${{ github.repository_owner }}"
           REPOSITORY: "${{ github.repository }}"
@@ -31,4 +34,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/$OWNER_LC/$REPOSITORY_LC:latest
+          tags: ghcr.io/${{ steps.lower_case.outputs.ownerlc }}/${{ steps.lower_case.outputs.repositorylc }}:latest
